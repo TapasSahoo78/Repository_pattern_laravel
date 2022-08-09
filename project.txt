@@ -1,0 +1,122 @@
+
+1. composer create-project laravel/laravel repository-using-laravel
+
+2. Setup Database :
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=order_api
+DB_USERNAME=<YOUR_DATABASE_USERNAME>
+DB_PASSWORD=<YOUR_DATABASE_PASSWORD>
+
+3. php artisan make:model Order -a
+
+The -a argument lets Artisan know that we want to create a migration file, seeder, factory, and controller for the Order model.
+
+The command above will create five new files:
+
+A controller in app/Http/Controllers/OrderController.php
+A database factory in database/factories/orderFactory.php
+A migration file in database/migrations/YYYY_MM_DD_HHMMSS_create_orders_table.php
+A model located in app/Models/Order.php
+A seeder file in database/seeders/OrderSeeder.php and
+
+
+4. Migration :
+public function up()
+{
+    Schema::create('orders', function (Blueprint $table) {
+        $table->id();
+        $table->text('details');
+        $table->string('client');
+        $table->boolean('is_fulfilled')->default(false);
+        $table->timestamps();
+    });
+ }
+
+
+5.database/factories/OrderFactory.php :
+public function definition()
+{
+    return [
+        'details'       => $this->faker->sentences(4, true),
+        'client'         => $this->faker->name(),
+        'is_fulfilled' => $this->faker->boolean(),
+    ];
+}
+
+6.database/seeders/OrderSeeder.php :
+public function run()
+{
+    Order::factory()->times(50)->create();
+}
+
+7. database/seeders/DatabaseSeeder.php :
+$this->call(
+    [
+        OrderSeeder::class
+    ]
+);
+
+8. Finally, run your migrations and seed the database using the following command :
+php artisan migrate --seed
+
+9. Finally, run your migrations and seed the database using the following command.
+php artisan migrate --seed
+
+10. Create the Repository :
+App --> Interfaces --> OrderRepositoryInterface.php
+
+App --> Repositories --> OrderRepository.php
+
+11. Creating the controllers :
+app/Http/Controllers/OrderController.php
+
+12. Adding the routes .
+
+13. Bind the interface and the implementation:
+php artisan make:provider RepositoryServiceProvider
+
+14. app/Providers/RepositoryServiceProvider.php :
+public function register()
+{
+    $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
+ }
+
+15. Finally, add the new Service Provider to the providers array in config/app.php.
+'providers' => [
+    // ...other declared providers
+    App\Providers\RepositoryServiceProvider::class,
+];
+
+16. php artisan serve
+
+{
+  "data": [
+    {
+      "id": 1,
+      "details": "Sit ullam cupiditate dolorem in. Magnam suscipit eaque occaecati facilis amet illum. Dolor perspiciatis velit laboriosam. Enim fugiat excepturi qui natus incidunt dolorem debitis ut.",
+      "client": "Cydney Conn V",
+      "is_fulfilled": 0,
+      "created_at": "2021-09-09T09:18:28.000000Z",
+      "updated_at": "2021-09-09T09:18:28.000000Z"
+    },
+    {
+      "id": 2,
+      "details": "Eum iste eum molestiae est. Voluptatibus veritatis earum commodi. Quod et laboriosam ratione dolor adipisci. Nam et debitis nobis ea sit.",
+      "client": "Willow Herzog",
+      "is_fulfilled": 1,
+      "created_at": "2021-09-09T09:18:28.000000Z",
+      "updated_at": "2021-09-09T09:18:28.000000Z"
+    },
+    {
+      "id": 3,
+      "details": "At maxime architecto repellat quidem id. Saepe provident quo eos officiis et tenetur. Et expedita maxime atque. Et consequuntur sequi aperiam possimus odio est ab.",
+      "client": "Mr. Peyton Nolan DVM",
+      "is_fulfilled": 1,
+      "created_at": "2021-09-09T09:18:28.000000Z",
+      "updated_at": "2021-09-09T09:18:28.000000Z"
+    }
+  ]
+}
+
