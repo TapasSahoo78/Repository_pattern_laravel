@@ -120,3 +120,15 @@ public function register()
   ]
 }
 
+
+
+
+
+
+MongoDB Install :
+composer require jenssegers/mongodb
+
+or,
+
+composer require mongodb/mongodb --ignore-platform-reqs
+composer require jenssegers/mongodb --ignore-platform-reqs
